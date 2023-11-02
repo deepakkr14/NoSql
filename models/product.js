@@ -1,7 +1,7 @@
 const mongodb = require("mongodb");
 const getdb = require("../util/database").getdb;
 class Product {
-  constructor(title, price, description, imageUrl) {
+  constructor(title,price,description,imageUrl) {
     this.title = title;
     this.price = price;
     this.description = description;
@@ -10,7 +10,7 @@ class Product {
 
   save() {
     const db = getdb();
-    db.collection("products")
+   return  db.collection("products")
       .insertOne(this)
       .then((result) => {
         console.log(`added a new product with the id ${result.insertedId}`);

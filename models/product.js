@@ -6,24 +6,24 @@ class Product {
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
-    this._id = id;
+    this._id = new mongodb.ObjectId(id);
   }
   save() {
     const db = getdb();
     let dbOp;
     if (this._id) {
       //  we will update the existing data
-      const filter = { _id:new mongodb.ObjectId(this._id)}
-      const update = {
-        $set: {
-          title:this.title ,price:this.price,description:this.description,imageUrl:this.imageUrl
-        }
-      };
+      // const filter = { _id:new mongodb.ObjectId(this._id)}
+      // const update = {
+      //   $set: {
+      //     title:this.title ,price:this.price,description:this.description,imageUrl:this.imageUrl
+      //   }
+      // };
       dbOp = db
         .collection("products")
-        .updateOne(filter,update);
-        // .updateOne({ _id: new mongodb.ObjectId(this._id) },{ $set: this });
-        console.log(`updated a new product with the id `);
+        // .updateOne(filter,update);
+        .updateOne({ _id: this._id }, { $set: this });
+      console.log(`updated a new product with the id `);
       // {title:this.title ,price:this.price,description:this.description,imageUrl:this.imageUrl}})
     } else {
       dbOp = db.collection("products").insertOne(this);
@@ -62,6 +62,17 @@ class Product {
         console.log(product, "is here");
         return product;
       });
+  }
+
+  static delete(prodId) {
+    const db = getdb();
+    return db
+      .collection("products")
+      // .find({ _id: new mongodb.ObjectId(prodId) })
+      .deleteOne({ _id: new mongodb.ObjectId(prodId) })
+      .then(() => console.log("deleted"));
+
+    // deletone({ _id: prodid})).
   }
 }
 

@@ -1,12 +1,13 @@
 const mongodb = require("mongodb");
 const getdb = require("../util/database").getdb;
 class Product {
-  constructor(title, price, description, imageUrl, id) {
+  constructor(title, price, description, imageUrl, id,userId) {
     this.title = title;
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
-    this._id = new mongodb.ObjectId(id);
+    this._id = id ? new mongodb.ObjectId(id):null;
+    this.userId=userId;
   }
   save() {
     const db = getdb();
@@ -59,43 +60,23 @@ class Product {
       .find({ _id: new mongodb.ObjectId(prodId) })
       .next()
       .then((product) => {
-        console.log(product, "is here");
+        console.log("product is here");
         return product;
       });
   }
 
   static delete(prodId) {
     const db = getdb();
-    return db
-      .collection("products")
-      // .find({ _id: new mongodb.ObjectId(prodId) })
-      .deleteOne({ _id: new mongodb.ObjectId(prodId) })
-      .then(() => console.log("deleted"));
+    return (
+      db
+        .collection("products")
+        // .find({ _id: new mongodb.ObjectId(prodId) })
+        .deleteOne({ _id: new mongodb.ObjectId(prodId) })
+        .then(() => console.log("deleted"))
+    );
 
     // deletone({ _id: prodid})).
   }
 }
-
-// const Product = sequelize.define("product", {
-//   id: {
-//     type: Sequelize.INTEGER,
-//     autoIncrement: true,
-//     allowNull: false,
-//     primaryKey: true,
-//   },
-//   title: Sequelize.STRING,
-//   price: {
-//     type: Sequelize.DOUBLE,
-//     allowNull: false,
-//   },
-//   imageUrl: {
-//     type: Sequelize.STRING,
-//     allowNull: false,
-//   },
-//   description: {
-//     type: Sequelize.STRING,
-//     allowNull: false,
-//   },
-// });
 
 module.exports = Product;

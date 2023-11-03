@@ -7,7 +7,7 @@ const errorController = require('./controllers/error');
 const MongoConnect = require('./util/database').MongoConnect;
 // const sequelize = require('./util/database');
 const Product = require('./models/product');
-// const User = require('./models/user');
+const User = require('./models/user');
 // const Cart = require('./models/cart');
 // const CartItem = require('./models/cart-item');
 // const Order = require('./models/order');
@@ -25,12 +25,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-  // User.findById(1)
-  //   .then(user => {
-  //     req.user = user;
+  User.findById('6544d3fa9752e1c51cb67cf0')
+    .then(user => {
+      req.user = user;
       next();
-  //   })
-  //   .catch(err => console.log(err));
+    })
+    .catch(err => console.log(err));
 });
 
 app.use('/admin', adminRoutes);

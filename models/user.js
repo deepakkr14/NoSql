@@ -74,11 +74,11 @@ class User {
       });
   }
   deleteFromCart(productId) {
-    console.log('i am calling')
-    const updatedCartItems = this.cart.items.filter(item => {
+    console.log("i am calling");
+    const updatedCartItems = this.cart.items.filter((item) => {
       return item.productId.toString() !== productId.toString();
     });
-    console.log(' i am callin e 2')
+    console.log(" i am callin e 2");
     const db = getdb();
     return db
       .collection("users")
@@ -86,6 +86,42 @@ class User {
         { _id: new ObjectID(this._id) },
         { $set: { cart: { items: updatedCartItems } } }
       );
+  }
+
+  addOrder() {
+    const db = getdb();
+    return (
+      this.getCart()
+        .then((products) => {
+          const order = {
+            items: products,
+            user: {
+              _id: new ObjectID(this._id),
+              name: this.name,
+            },
+          };
+          return db.collection("orders").insertOne(order);
+        })
+        // .then(result=>{
+        // this.cart ={ items:[]};
+        // })
+        // return db
+        // .collection("users")
+        // .insertOne(this.cart)
+        .then((result) => {
+          this.cart = { items: [] };
+          return db
+            .collection("users")
+            .updateOne(
+              { _id: new ObjectID(this._id) },
+              { $set: { cart: { items: [] } } }
+            );
+        })
+    );
+  }
+  getOrders(){
+    const db=getdb();
+    return db.collection('orders').find({'user._id':new ObjectID(this._id)}).toArray();
   }
   static findById(userId) {
     const db = getdb();

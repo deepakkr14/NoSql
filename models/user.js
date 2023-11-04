@@ -121,7 +121,7 @@ class User {
   }
   getOrders(){
     const db=getdb();
-    return db.collection('orders').find({'user._id':new ObjectID(this._id)}).toArray();
+    // return db.collection('orders').find({'user._id':new ObjectID(this._id)}).toArray();
   }
   static findById(userId) {
     const db = getdb();

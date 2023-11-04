@@ -46,7 +46,7 @@ class Product {
       .find()
       .toArray()
       .then((products) => {
-        console.log(products);
+        console.log(products,'fetch all of product');
         return products;
       })
 

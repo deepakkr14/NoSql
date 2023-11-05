@@ -43,11 +43,12 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
+  console.log(" i am called");
   req.user
-    .populate('cart.items.productId')
-    .execPopulate()
-    .then(user => {
-      const products=user.cart.items;
+    .populate("cart.items.productId")
+    // .execPopulate()
+    .then((user) => {
+      const products = user.cart.items;
       res.render("shop/cart", {
         path: "/cart",
         pageTitle: "Your Cart",
@@ -55,7 +56,9 @@ exports.getCart = (req, res, next) => {
         // });
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) =>
+      console.log(err, "eeeeeeeeeeeee uaaaaaaaaaaaaau uaaaaaaaaa")
+    );
 };
 
 exports.postCart = (req, res, next) => {
@@ -67,7 +70,7 @@ exports.postCart = (req, res, next) => {
     })
     .then((result) => {
       console.log(result);
-      res.redirect('/cart'); 
+      res.redirect("/cart");
     })
 
     // let fetchedCart;

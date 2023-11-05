@@ -52,7 +52,7 @@ userSchema.methods.addToCart = function (product) {
   this.cart = updatedCart;
   return this.save();
 };
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("user", userSchema);
 // const mongodb = require("mongodb");
 // const getdb = require("../util/database").getdb;
 // const ObjectID = mongodb.ObjectId;

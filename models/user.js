@@ -18,6 +18,11 @@ const userSchema = new Schema({
   },
 });
 
+userSchema.methods.getOrder=function (){
+    return db.collection('orders').find({'user._id':new ObjectID(this._id)}).toArray();
+      
+    }
+
 userSchema.methods.deleteFromCart=function (productId) {
       const updatedCartItems = this.cart.items.filter((item) => {
         return item.productId.toString() !== productId.toString();

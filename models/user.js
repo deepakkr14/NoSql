@@ -7,13 +7,43 @@ const userSchema = new Schema({
   cart: {
     items: [
       {
-        productId: { type: Schema.Types.ObjectId, ref:'product',required: true },
+        productId: {
+          type: Schema.Types.ObjectId,
+          ref: "product",
+          required: true,
+        },
         quantity: { type: Number, required: true },
       },
     ],
   },
 });
 
+userSchema.methods.addToCart = function (product) {
+  const cartProductIndex = this.cart.items.findIndex((cp) => {
+    console.log(this.cart.items);
+    return cp.productId.toString() === product._id.toString();
+  });
+  let newQuantity = 1;
+  const updatedCartItems = [...this.cart.items];
+
+  if (cartProductIndex >= 0) {
+    newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+    updatedCartItems[cartProductIndex].quantity = newQuantity;
+  } else {
+    updatedCartItems.push({
+      productId: product._id,
+      quantity: newQuantity,
+    });
+  }
+  // if cart contains the product already then increase the count
+  // else push it to the array of items in the cart
+
+  const updatedCart = {
+    items: updatedCartItems,
+  };
+  this.cart = updatedCart;
+  return this.save();
+};
 module.exports = mongoose.model("User", userSchema);
 // const mongodb = require("mongodb");
 // const getdb = require("../util/database").getdb;

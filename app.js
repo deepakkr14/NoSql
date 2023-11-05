@@ -8,7 +8,7 @@ const errorController = require("./controllers/error");
 // const MongoConnect = require("./util/database").MongoConnect;
 // const sequelize = require('./util/database');
 const Product = require("./models/product");
-// const User = require("./models/user");
+const User = require("./models/user");
 // const Cart = require('./models/cart');
 // const CartItem = require('./models/cart-item');
 // const Order = require('./models/order');
@@ -25,16 +25,16 @@ const shopRoutes = require("./routes/shop");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// app.use((req, res, next) => {
-//   User.findById("6544d3fa9752e1c51cb67cf0")
-//     .then((user) => {
-//       console.log(user, "app js ka req user");
-//       req.user = new User(user.username, user.email, user.cart, user._id);
+app.use((req, res, next) => {
+  User.findById('65472cdedfa8f4e03a9bb97e')
+    .then((user) => {
+      console.log(user, "app js ka req user");
+      req.user = user;
 
-//       next();
-//     })
-//     .catch((err) => console.log(err));
-// });
+      next();
+    })
+    .catch((err) => console.log(err));
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -50,5 +50,18 @@ mongoose
   )
   .then((status) => {
     console.log('connected via mongoose')
+    User.findOne().then(user=>{
+      if(!user){
+        const user=new User({
+          name:'deep',
+          email:'test@gmail.com',
+          cart:{
+            items:[]
+          }
+        });
+        user.save();
+      }
+    })
+    
     app.listen(3000);
   }).catch(err=>console.log(err));
